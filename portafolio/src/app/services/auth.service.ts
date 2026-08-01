@@ -15,7 +15,7 @@ export class AuthService {
       id: 1,
       email: 'admin@portafolio.com',
       password: 'admin123',
-      name: 'Laura Desarrolladora',
+      name: 'Laura',
       role: 'admin',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Laura'
     },
@@ -48,7 +48,8 @@ export class AuthService {
     return new Promise((resolve) => {
       setTimeout(() => {
         const user = this.mockUsers.find(
-          u => u.email === request.email && u.password === request.password
+          u => u.name.toLowerCase() === request.name.toLowerCase()
+            && u.password === request.password
         );
         if (user) {
           const { password, ...userWithoutPassword } = user;
@@ -100,6 +101,6 @@ export class AuthService {
   logout(): void {
     this.currentUserSignal.set(null);
     localStorage.removeItem('portafolio_user');
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

@@ -29,7 +29,7 @@ export class ProjectsService {
         architecture: 'Arquitectura modular con NgRx para gestión de estado. Microservicios backend con Node.js y Express. Base de datos MongoDB con Mongoose ORM.',
         challenges: 'Sincronización del carrito en tiempo real entre múltiples pestañas. Optimización de renders con ChangeDetectionStrategy.OnPush. Integración segura de pagos con Stripe.',
         solutions: 'Uso de BroadcastChannel API para sincronización. Memoización selectiva con createSelector de NgRx. Webhooks de Stripe con verificación de firmas.',
-        role: 'Desarrollador Full Stack',
+        role: 'Desarrolladora Web',
         duration: '3 meses'
       },
       featured: true
@@ -47,7 +47,7 @@ export class ProjectsService {
         architecture: 'Ionic Angular con Capacitor para nativo. Firebase como BaaS (Auth, Firestore, Storage). Arquitectura por features con lazy loading.',
         challenges: 'Performance en listas grandes de ejercicios. Sincronización offline-first con Firestore. Notificaciones push personalizadas.',
         solutions: 'Virtual scrolling con cdk-virtual-scroll. Firestore offline persistence y sync automático. Capacitor Local Notifications con scheduling.',
-        role: 'Desarrollador Frontend & Mobile',
+        role: 'Desarrolladora Frontend & Mobile',
         duration: '4 meses'
       },
       featured: true
@@ -81,7 +81,7 @@ export class ProjectsService {
         architecture: 'Microservicios: Auth, Citas, Notificaciones, Reportes. RabbitMQ para comunicación asíncrona. WebSocket para tiempo real. Docker Swarm para orquestación.',
         challenges: 'Consistencia de datos entre servicios. Manejo de concurrencia en reservas simultáneas. Escalado horizontal del servicio de notificaciones.',
         solutions: 'Saga pattern para transacciones distribuidas. Optimistic locking con versionado de registros. Auto-scaling basado en métricas de cola RabbitMQ.',
-        role: 'Desarrollador Full Stack & DevOps',
+        role: 'Desarrolladora Web & DevOps',
         duration: '5 meses'
       },
       featured: false

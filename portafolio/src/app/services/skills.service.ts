@@ -4,11 +4,11 @@ import { Skill, SkillCategory, SkillCategoryInfo, SkillStats, ContributionYear }
 @Injectable({ providedIn: 'root' })
 export class SkillsService {
   categories: SkillCategoryInfo[] = [
-    { key: 'frontend', label: 'Frontend', color: '#8B5CF6' },
-    { key: 'backend', label: 'Backend', color: '#7C3AED' },
-    { key: 'database', label: 'Bases de Datos', color: '#6D28D9' },
-    { key: 'tools', label: 'Herramientas', color: '#5B21B6' },
-    { key: 'mobile', label: 'Mobile', color: '#4C1D95' }
+    { key: 'frontend', label: 'Frontend', color: '#556B2F' },
+    { key: 'backend', label: 'Backend', color: '#6F421F' },
+    { key: 'database', label: 'Bases de Datos', color: '#C58B2B' },
+    { key: 'tools', label: 'Herramientas', color: '#8B5E3C' },
+    { key: 'mobile', label: 'Mobile', color: '#A9731F' }
   ];
 
   private mockSkills: Skill[] = [

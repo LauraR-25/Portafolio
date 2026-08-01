@@ -10,28 +10,28 @@ Chart.register(...registerables);
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="habilidades" class="py-16 md:py-24 bg-white">
+    <section id="habilidades" class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="section-title">Habilidades & <span class="gradient-text">Estadisticas</span></h2>
-          <p class="section-subtitle">Tecnologias que domino y metricas de mi trayectoria profesional</p>
+          <h2 class="section-title">Habilidades & <span class="gradient-text">Estadísticas</span></h2>
+          <p class="section-subtitle">Tecnologías que domino y métricas de mi trayectoria profesional</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           <div class="card p-6 md:p-8">
-            <h3 class="text-lg font-bold text-violet-950 mb-6">Dominio por Tecnologia</h3>
+            <h3 class="text-lg font-bold text-night-900 mb-6">Dominio por Tecnología</h3>
             <div class="space-y-4">
               @for (skill of skillsByFrontend(); track skill.name) {
                 <div class="group">
                   <div class="flex items-center justify-between mb-1.5">
                     <div class="flex items-center gap-2">
                       <span class="text-xs">{{ skill.icon }}</span>
-                      <span class="text-sm font-medium text-gray-700">{{ skill.name }}</span>
+                      <span class="text-sm font-medium text-brown-700">{{ skill.name }}</span>
                     </div>
-                    <span class="text-xs font-semibold text-violet-600">{{ skill.level }}%</span>
+                    <span class="text-xs font-semibold text-olive-700">{{ skill.level }}%</span>
                   </div>
-                  <div class="w-full h-2.5 rounded-full bg-gray-100 overflow-hidden">
-                    <div class="h-full rounded-full bg-gradient-to-r from-violet-500 to-purple-500 transition-all duration-1000 ease-out"
+                  <div class="w-full h-2.5 rounded-full bg-cream-200 overflow-hidden">
+                    <div class="h-full rounded-full bg-gradient-to-r from-olive-500 to-mustard-400 transition-all duration-1000 ease-out"
                          [style.width.%]="skill.level">
                     </div>
                   </div>
@@ -41,15 +41,15 @@ Chart.register(...registerables);
           </div>
 
           <div class="card p-6 md:p-8">
-            <h3 class="text-lg font-bold text-violet-950 mb-6">Distribucion por Categoria</h3>
+            <h3 class="text-lg font-bold text-night-900 mb-6">Distribución por Categoría</h3>
             <div class="space-y-5">
               @for (cat of categories; track cat.key) {
                 <div>
                   <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-700">{{ cat.label }}</span>
-                    <span class="text-xs font-semibold text-violet-600">{{ getCategoryAvg(cat.key) }}%</span>
+                    <span class="text-sm font-medium text-brown-700">{{ cat.label }}</span>
+                    <span class="text-xs font-semibold text-olive-700">{{ getCategoryAvg(cat.key) }}%</span>
                   </div>
-                  <div class="w-full h-3 rounded-full bg-gray-100 overflow-hidden">
+                  <div class="w-full h-3 rounded-full bg-cream-200 overflow-hidden">
                     <div class="h-full rounded-full transition-all duration-1000 ease-out"
                          [style.width.%]="getCategoryAvg(cat.key)"
                          [style.background]="cat.color">
@@ -62,7 +62,7 @@ Chart.register(...registerables);
         </div>
 
         <div class="card p-6 md:p-8">
-          <h3 class="text-lg font-bold text-violet-950 mb-6 text-center">Contribuciones por Ano</h3>
+          <h3 class="text-lg font-bold text-night-900 mb-6 text-center">Contribuciones por Año</h3>
           <div class="relative">
             <canvas #barChart class="w-full max-h-72"></canvas>
           </div>
@@ -122,8 +122,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
           {
             label: 'Proyectos',
             data: contributions.map(c => c.projects),
-            backgroundColor: '#DDD6FE',
-            borderColor: '#8B5CF6',
+            backgroundColor: '#D4A373',
+            borderColor: '#8B5E3C',
             borderWidth: 1,
             borderRadius: 6,
             barPercentage: 0.5,
@@ -131,8 +131,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
           {
             label: 'Commits',
             data: contributions.map(c => c.commits),
-            backgroundColor: '#8B5CF6',
-            borderColor: '#7C3AED',
+            backgroundColor: '#8B5E3C',
+            borderColor: '#6F421F',
             borderWidth: 1,
             borderRadius: 6,
             barPercentage: 0.5,
@@ -140,8 +140,8 @@ export class SkillsComponent implements OnInit, OnDestroy {
           {
             label: 'Contribuciones',
             data: contributions.map(c => c.contributions),
-            backgroundColor: '#4C1D95',
-            borderColor: '#1E1B4B',
+            backgroundColor: '#556B2F',
+            borderColor: '#4A5D2E',
             borderWidth: 1,
             borderRadius: 6,
             barPercentage: 0.5,
@@ -164,7 +164,7 @@ export class SkillsComponent implements OnInit, OnDestroy {
         scales: {
           y: {
             beginAtZero: true,
-            grid: { color: '#F3F4F6' },
+            grid: { color: '#EAE3D2' },
             ticks: { font: { family: 'Inter' } }
           },
           x: {

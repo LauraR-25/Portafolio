@@ -5,7 +5,7 @@ export interface Project {
   category: ProjectCategory;
   image: string;
   technologies: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   videoUrl?: string;
   details: ProjectDetails;
