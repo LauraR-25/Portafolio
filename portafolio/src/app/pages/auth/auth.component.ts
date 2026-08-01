@@ -39,7 +39,7 @@ import { AuthService } from '../../services/auth.service';
                 <!-- COLUMNA IZQUIERDA: espacio exclusivo para el sprite -->
                 <div class="relative w-44 flex-shrink-0 h-full min-h-[360px] flex items-center justify-center">
                   <img src="/assets/images/sprites/laura.png" alt="Laura frente"
-                       class="absolute -left-6 -bottom-4 h-[115%] max-w-none object-contain drop-shadow-xl z-10 select-none pointer-events-none"
+                       class="absolute -left-28 -bottom-4 h-[115%] max-w-none object-contain drop-shadow-xl z-10 select-none pointer-events-none"
                        (error)="onImageError($event)">
                 </div>
 
@@ -105,7 +105,7 @@ import { AuthService } from '../../services/auth.service';
                 <!-- COLUMNA IZQUIERDA: espacio exclusivo para el sprite -->
                 <div class="relative w-44 flex-shrink-0 h-full min-h-[360px] flex items-center justify-center">
                   <img src="/assets/images/sprites/laura-espalda.png" alt="Laura espalda"
-                       class="absolute -left-6 -bottom-4 h-[115%] max-w-none object-contain drop-shadow-xl z-10 select-none pointer-events-none"
+                       class="absolute -left-28 -bottom-4 h-[115%] max-w-none object-contain drop-shadow-xl z-10 select-none pointer-events-none"
                        (error)="onImageError($event)">
                 </div>
 
