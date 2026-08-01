@@ -59,6 +59,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        hand: ['Caveat', 'cursive'],
       },
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(85, 107, 47, 0.15)',
