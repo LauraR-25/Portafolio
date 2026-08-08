@@ -41,10 +41,10 @@ interface SkillBar {
       </button>
 
       <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14
-                  grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-10 lg:gap-14 items-center min-h-screen">
+                  grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-10 lg:gap-14 items-center min-h-screen">
 
-        <!-- ===== LADO IZQUIERDO: Laura + bocadillo ===== -->
-        <div class="relative flex items-center justify-center cursor-pencil">
+        <!-- ===== LADO DERECHO: Laura + bocadillo ===== -->
+        <div class="relative flex items-center justify-center cursor-pencil lg:order-last">
           <div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-44 h-7 rounded-full bg-night-900/10 blur-md"></div>
 
           <!-- Bocadillo de diálogo -->
@@ -64,8 +64,8 @@ interface SkillBar {
                (error)="onImageError($event)">
         </div>
 
-        <!-- ===== LADO DERECHO: La libreta ===== -->
-        <div class="relative cursor-pencil">
+        <!-- ===== LADO IZQUIERDO: La libreta ===== -->
+        <div class="relative cursor-pencil lg:order-first">
           <!-- Pila de hojas detrás -->
           <div class="absolute inset-0 rounded-3xl bg-cream-200 border border-mustard-200/50
                       translate-x-2 -translate-y-2 rotate-[0.5deg]"></div>
