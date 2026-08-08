@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+@font-face {
+  font-family: 'Autography';
+  src: url('/assets/fonts/Autography.otf') format('opentype');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,6 +65,14 @@ section[id] {
 
   .section-subtitle {
     @apply text-lg text-brown-500 mb-12 max-w-2xl mx-auto;
+  }
+
+  /* Caligrafía/firma para títulos de impacto: Autography con respaldo manuscrito */
+  .font-autography {
+    font-family: 'Autography', 'Caveat', cursive;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    line-height: 1.15;
   }
 
   .btn-primary {
@@ -179,6 +195,19 @@ section[id] {
     height: 100%;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    transition: box-shadow 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
+  }
+
+  /* Elevación según el estado: cerrada, solo la portada proyecta sombra sobre
+     el escritorio; abierta, toda la doble página lo hace. Se evita así el
+     "rectángulo fantasma" de sombra sobre la mitad izquierda vacía que se
+     veía cuando el cuaderno estaba cerrado (una hoja blanca a su izquierda). */
+  .notebook-book:not(.is-open) .book-cover {
+    box-shadow: 0 30px 60px -15px rgba(30, 27, 46, 0.5);
+  }
+
+  .notebook-book.is-open .book {
+    box-shadow: 0 30px 60px -15px rgba(30, 27, 46, 0.5);
   }
 
   /* Pila de hojas detrás de la libreta */
@@ -348,7 +377,8 @@ section[id] {
     height: 100%;
     transform-origin: left center;
     transform-style: preserve-3d;
-    transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
+    transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1),
+                box-shadow 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
   }
 
   .book-cover.is-open {
