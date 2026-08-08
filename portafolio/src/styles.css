@@ -153,16 +153,16 @@ section[id] {
   }
 
   @media (min-width: 640px) {
-    .notebook-book { --page-w: 11.5rem; height: 26rem; }
+    .notebook-book { --page-w: 12.5rem; height: 26rem; }
   }
   @media (min-width: 768px) {
-    .notebook-book { --page-w: 12.5rem; height: 30rem; }
+    .notebook-book { --page-w: 15rem; height: 30rem; }
   }
   @media (min-width: 1024px) {
-    .notebook-book { --page-w: 14.5rem; height: 32rem; }
+    .notebook-book { --page-w: 18rem; height: 32rem; }
   }
   @media (min-width: 1280px) {
-    .notebook-book { --page-w: 16rem; height: 34rem; }
+    .notebook-book { --page-w: 22rem; height: 34rem; }
   }
 
   .notebook-book.is-open {
@@ -182,6 +182,7 @@ section[id] {
     inset: 0;
     border-radius: 1.5rem;
     pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
   }
 
   .book-stack-1 {
@@ -197,12 +198,21 @@ section[id] {
     border: 1px solid rgba(197, 139, 43, 0.35);
   }
 
+  /* Estado cerrado: solo se ve el bloque único de la portada (sin hoja vacía
+     a la izquierda ni página derecha/fondo reveladas antes de abrir) */
+  .notebook-book:not(.is-open) .book-stack,
+  .notebook-book:not(.is-open) .book-page {
+    opacity: 0;
+    visibility: hidden;
+  }
+
   /* Página derecha (bajo la tapa, se revela al abrir) */
   .book-page {
     position: absolute;
     top: 0;
     bottom: 0;
     width: 50%;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
   }
 
   .book-page-right { right: 0; }
@@ -272,17 +282,105 @@ section[id] {
     transform: rotateY(180deg);
   }
 
-  /* Lomo / bisagra central */
+  /* Lomo / bisagra central con anillos metálicos */
   .book-spine {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 50%;
-    width: 16px;
+    width: 12px;
     transform: translateX(-50%) translateZ(3px);
     background: linear-gradient(90deg, rgba(30, 27, 46, 0.10), rgba(244, 240, 234, 0.9) 45%, rgba(244, 240, 234, 0.9) 55%, rgba(30, 27, 46, 0.10));
     pointer-events: none;
     z-index: 6;
+  }
+
+  .book-rings {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateZ(6px);
+    width: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 22px 0;
+    pointer-events: none;
+    z-index: 8;
+  }
+
+  .book-ring {
+    width: 18px;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #F2F2F2 0%, #A6A6A6 40%, #6E6E6E 55%, #E6E6E6 100%);
+    box-shadow: 0 1px 3px rgba(30, 27, 46, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
+  }
+
+  /* Orificios perforados junto al lomo (efecto anillado) */
+  .page-holes {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 14px;
+    background-image: radial-gradient(circle 4px at 50% 50%, rgba(139, 94, 60, 0.10) 3px, rgba(139, 94, 60, 0.22) 4px, transparent 4.6px);
+    background-size: 14px 26px;
+    background-repeat: repeat;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .page-holes--right { right: 4px; }
+  .page-holes--left { left: 4px; }
+
+  /* Pestaña "Abrir" en el borde derecho de la portada cerrada */
+  .cover-tab {
+    position: absolute;
+    top: 2.5rem;
+    right: -1.1rem;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.6rem;
+    border-radius: 0.75rem 0.75rem 0.75rem 0.2rem;
+    background: linear-gradient(180deg, #E3B978, #D4A373);
+    color: #422B0E;
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px -6px rgba(30, 27, 46, 0.4);
+    transform: rotate(-4deg);
+    transition: transform 0.2s ease;
+  }
+
+  .cover-tab:hover {
+    transform: rotate(-4deg) scale(1.06);
+  }
+
+  .close-book-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.35rem;
+    color: #6F421F;
+    padding: 0.5rem 1.1rem;
+    border-radius: 0.75rem;
+    border: 2px solid rgba(197, 139, 43, 0.55);
+    background-color: #FBF8F2;
+    box-shadow: 0 4px 20px rgba(111, 66, 31, 0.10);
+    transition: all 0.2s ease;
+  }
+
+  .close-book-btn:hover {
+    background-color: #F6E9D1;
+    border-color: #C58B2B;
+    color: #4A5D2E;
   }
 
   /* Portada de la libreta */
