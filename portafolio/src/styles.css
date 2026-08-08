@@ -140,29 +140,27 @@ section[id] {
       repeating-linear-gradient(180deg, transparent 0 31px, rgba(139, 94, 60, 0.09) 31px 32px);
   }
 
-  /* Libreta que abre en doble página: la tapa gira sobre su lomo (bisagra) */
+  /* Libreta que abre en doble página: la tapa gira sobre su lomo (bisagra).
+     Formato apaisado/amplio: ancho notoriamente mayor que la altura, escalado
+     según el ancho disponible del lienzo (--page-w) con una proporción
+     height = width total * --book-ratio (ratio < 1 => horizontal). */
 
   .notebook-book {
-    --page-w: 10.5rem;
+    --page-w: clamp(9.5rem, 40vw, 14rem);
+    --book-ratio: 0.78;
     width: calc(var(--page-w) * 2);
-    height: 24rem;
+    height: calc(var(--page-w) * 2 * var(--book-ratio));
     position: relative;
     transform: translateX(calc(var(--page-w) / -2));
     transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
-    perspective: 2200px;
+    perspective: 2600px;
   }
 
   @media (min-width: 640px) {
-    .notebook-book { --page-w: 12.5rem; height: 26rem; }
-  }
-  @media (min-width: 768px) {
-    .notebook-book { --page-w: 15rem; height: 30rem; }
+    .notebook-book { --page-w: clamp(12rem, 36vw, 19rem); --book-ratio: 0.72; }
   }
   @media (min-width: 1024px) {
-    .notebook-book { --page-w: 18rem; height: 32rem; }
-  }
-  @media (min-width: 1280px) {
-    .notebook-book { --page-w: 22rem; height: 34rem; }
+    .notebook-book { --page-w: clamp(16rem, 30vw, 34rem); --book-ratio: 0.6; }
   }
 
   .notebook-book.is-open {
@@ -269,6 +267,13 @@ section[id] {
   .book-cover.is-open {
     transform: rotateY(-180deg);
     pointer-events: none;
+  }
+
+  /* Página izquierda (cara trasera de la tapa): se re-habilitan los eventos
+     cuando la libreta está abierta para que el índice/botones sean clicables,
+     sin bloquear la página derecha que queda debajo de la tapa girada */
+  .book-cover.is-open .book-cover-back {
+    pointer-events: auto;
   }
 
   .book-cover-face {
