@@ -280,13 +280,25 @@ const FLIP_MID = FLIP_DURATION / 2;
 
           @case ('index') {
             <div class="p-4 md:p-6 pl-10 md:pl-11 pr-4 flex flex-col h-full">
-              <div class="text-center mt-6 md:mt-12">
-                <p class="font-hand text-3xl md:text-5xl text-mustard-500">✨</p>
-                <h3 class="font-autography text-3xl md:text-6xl text-night-900 mt-2 md:mt-3 tracking-wide">¡Bienvenida!</h3>
-                <p class="font-hand text-lg md:text-3xl text-brown-600 mt-2 md:mt-3 leading-snug">
-                  En estas páginas encontrarás mis proyectos y habilidades, y podrás
-                  visitar mi perfil de GitHub.
-                </p>
+              <div class="flex-1 min-h-0 flex flex-col items-center justify-center gap-4 sm:gap-6 md:gap-8
+                          mt-4 md:mt-6">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-5">
+                  <img src="assets/images/sprites/expressions/LauraAmorosa.png"
+                       alt="Laura amorosa"
+                       class="shrink-0 w-24 md:w-44 lg:w-52 h-auto object-contain drop-shadow-md"
+                       loading="lazy">
+
+                  <div class="flex flex-col gap-2.5 md:gap-4 max-w-[14rem] sm:max-w-[16rem] md:max-w-[24rem] -ml-2 md:-ml-4">
+                    <div class="chat-bubble">
+                      <h3 class="font-autography text-xl md:text-4xl text-night-900 leading-none tracking-wide">¡Bienvenido!</h3>
+                    </div>
+                    <div class="chat-bubble">
+                      <p class="font-hand text-base md:text-2xl text-brown-700 leading-snug">
+                        En estas páginas encontrarás mis proyectos y habilidades, y podrás visitar mi perfil de GitHub.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="mt-auto mb-2 md:mb-3 text-center">
                 <button (click)="closeBook()" class="close-book-btn cursor-pencil">
