@@ -18,7 +18,17 @@ interface SkillBar {
   color: string;
 }
 
+interface FlipState {
+  active: boolean;
+  dir: 'forward' | 'backward';
+  from: ViewKey;
+  to: ViewKey;
+  pastMid: boolean;
+}
+
 const OPEN_DURATION = 720;
+const FLIP_DURATION = 680;
+const FLIP_MID = FLIP_DURATION / 2;
 
 @Component({
   selector: 'app-home',
@@ -48,7 +58,9 @@ const OPEN_DURATION = 720;
 
         <!-- ===== Área de la libreta ===== -->
         <div class="relative flex items-center justify-center">
-          <div class="notebook-book cursor-pencil" [class.is-open]="open()">
+          <div class="notebook-book cursor-pencil"
+               [class.is-open]="open()"
+               [class.is-flipping]="flip().active">
             <div class="book-stack book-stack-2"></div>
             <div class="book-stack book-stack-1"></div>
 
@@ -59,7 +71,29 @@ const OPEN_DURATION = 720;
                   <div class="page-spine-shadow page-spine-shadow--left"></div>
                   <div class="page-holes page-holes--left"></div>
                   <div class="book-page-scroll">
-                    <ng-container *ngTemplateOutlet="rightTpl"></ng-container>
+                    <ng-container *ngTemplateOutlet="viewRight; context: { v: view() }"></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hoja de volteo para el cambio de página -->
+              <div class="book-flip"
+                   [class.is-visible]="flip().active"
+                   [class.is-forward]="flip().dir === 'forward'"
+                   [class.is-backward]="flip().dir === 'backward'"
+                   [class.is-past-mid]="flip().pastMid">
+                <div class="book-flip-face book-flip-face--front">
+                  <div class="book-page-paper rounded-2xl">
+                    <div class="book-page-scroll">
+                      <ng-container *ngTemplateOutlet="flip().dir === 'forward' ? viewRight : viewLeft; context: { v: flip().from }"></ng-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="book-flip-face book-flip-face--back">
+                  <div class="book-page-paper rounded-2xl">
+                    <div class="book-page-scroll">
+                      <ng-container *ngTemplateOutlet="flip().dir === 'forward' ? viewLeft : viewRight; context: { v: flip().to }"></ng-container>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -110,7 +144,7 @@ const OPEN_DURATION = 720;
                     <div class="page-spine-shadow page-spine-shadow--right"></div>
                     <div class="page-holes page-holes--right"></div>
                     <div class="book-page-scroll">
-                      <ng-container *ngTemplateOutlet="leftTpl"></ng-container>
+                      <ng-container *ngTemplateOutlet="viewLeft; context: { v: view() }"></ng-container>
                     </div>
                   </div>
                 </div>
@@ -120,9 +154,9 @@ const OPEN_DURATION = 720;
         </div>
       </div>
 
-      <!-- ===== Plantilla: página izquierda ===== -->
-      <ng-template #leftTpl>
-        @switch (view()) {
+      <!-- ===== Plantilla reutilizable: página izquierda según la vista ===== -->
+      <ng-template #viewLeft let-v="v">
+        @switch (v) {
 
           @case ('index') {
             <div class="p-4 md:p-6 pl-10 md:pl-11 pr-4">
@@ -222,9 +256,9 @@ const OPEN_DURATION = 720;
         }
       </ng-template>
 
-      <!-- ===== Plantilla: página derecha ===== -->
-      <ng-template #rightTpl>
-        @switch (view()) {
+      <!-- ===== Plantilla reutilizable: página derecha según la vista ===== -->
+      <ng-template #viewRight let-v="v">
+        @switch (v) {
 
           @case ('index') {
             <div class="p-4 md:p-6 pl-10 md:pl-11 pr-4 flex flex-col h-full">
@@ -377,16 +411,16 @@ export class HomeComponent implements OnDestroy {
   ];
 
   skills: SkillBar[] = [
-    { name: 'Angular', level: 95, color: '#C58B2B' },
-    { name: 'HTML', level: 95, color: '#D4A373' },
-    { name: 'CSS', level: 93, color: '#8CA052' },
-    { name: 'TypeScript', level: 92, color: '#6F421F' },
-    { name: 'Git', level: 90, color: '#556B2F' },
-    { name: 'Express JS', level: 88, color: '#A9731F' },
-    { name: 'Node JS', level: 85, color: '#8B5E3C' },
-    { name: 'Postgres', level: 82, color: '#AB7D55' },
-    { name: 'Docker', level: 80, color: '#6A8037' },
-    { name: 'Java', level: 70, color: '#556B2F' },
+    { name: 'Angular', level: 10, color: '#C58B2B' },
+    { name: 'HTML', level: 15, color: '#D4A373' },
+    { name: 'CSS', level: 20, color: '#8CA052' },
+    { name: 'TypeScript', level: 15, color: '#6F421F' },
+    { name: 'Git', level: 35, color: '#556B2F' },
+    { name: 'Express JS', level: 5, color: '#A9731F' },
+    { name: 'Node JS', level: 10, color: '#8B5E3C' },
+    { name: 'Postgres', level: 8, color: '#AB7D55' },
+    { name: 'Docker', level: 10, color: '#6A8037' },
+    { name: 'Java', level: 15, color: '#556B2F' },
   ];
 
   rings = Array.from({ length: 11 }, (_, i) => i);
@@ -407,9 +441,11 @@ export class HomeComponent implements OnDestroy {
   view = signal<ViewKey>('index');
   revealed = signal(false);
   transitioning = signal(false);
+  flip = signal<FlipState>({ active: false, dir: 'forward', from: 'index', to: 'index', pastMid: false });
 
   private bookTimer: ReturnType<typeof setTimeout> | null = null;
-  private sectionTimer: ReturnType<typeof setTimeout> | null = null;
+  private midTimer: ReturnType<typeof setTimeout> | null = null;
+  private flipTimer: ReturnType<typeof setTimeout> | null = null;
 
   openBook(): void {
     if (this.transitioning() || this.open()) return;
@@ -418,6 +454,7 @@ export class HomeComponent implements OnDestroy {
     this.revealed.set(false);
     this.transitioning.set(true);
     this.open.set(true);
+    this.resetFlip();
 
     if (this.bookTimer) clearTimeout(this.bookTimer);
     this.bookTimer = setTimeout(() => {
@@ -427,24 +464,46 @@ export class HomeComponent implements OnDestroy {
   }
 
   selectSection(key: Exclude<ViewKey, 'index'>): void {
-    if (this.transitioning() || key === this.view()) return;
+    if (this.transitioning() || this.flip().active || key === this.view()) return;
 
-    this.revealed.set(false);
-    this.view.set(key);
-
-    if (this.sectionTimer) clearTimeout(this.sectionTimer);
-    this.sectionTimer = setTimeout(() => this.revealed.set(true), 80);
+    this.startFlip('forward', this.view(), key);
   }
 
   goToIndex(): void {
-    this.closeBook();
+    if (this.transitioning() || this.flip().active || this.view() === 'index') return;
+
+    this.startFlip('backward', this.view(), 'index');
+  }
+
+  private startFlip(dir: FlipState['dir'], from: ViewKey, to: ViewKey): void {
+    this.resetFlip();
+    this.flip.set({ active: true, dir, from, to, pastMid: false });
+    this.revealed.set(false);
+
+    // Intercambio del contenido y elevación de capa exactamente en el punto
+    // medio (hoja a 90°, perpendicular a la pantalla), imperceptible al usuario.
+    this.midTimer = setTimeout(() => {
+      this.view.set(to);
+      this.flip.update(f => ({ ...f, pastMid: true }));
+    }, FLIP_MID);
+    this.flipTimer = setTimeout(() => {
+      this.flip.set({ active: false, dir, from, to, pastMid: false });
+      this.revealed.set(true);
+    }, FLIP_DURATION);
+  }
+
+  private resetFlip(): void {
+    if (this.midTimer) clearTimeout(this.midTimer);
+    if (this.flipTimer) clearTimeout(this.flipTimer);
+    this.flip.set({ active: false, dir: 'forward', from: 'index', to: 'index', pastMid: false });
   }
 
   closeBook(): void {
-    if (this.transitioning() || !this.open()) return;
+    if (this.transitioning() || this.flip().active || !this.open()) return;
 
     this.transitioning.set(true);
     this.open.set(false);
+    this.resetFlip();
 
     if (this.bookTimer) clearTimeout(this.bookTimer);
     this.bookTimer = setTimeout(() => {
@@ -472,6 +531,6 @@ export class HomeComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     if (this.bookTimer) clearTimeout(this.bookTimer);
-    if (this.sectionTimer) clearTimeout(this.sectionTimer);
+    this.resetFlip();
   }
 }

@@ -167,11 +167,18 @@ section[id] {
     transform: translateX(0);
   }
 
+  /* Durante el paso de página se bloquean todos los eventos de puntero de la
+     libreta para impedir clics rápidos o repetidos que rompan la animación */
+  .notebook-book.is-flipping {
+    pointer-events: none;
+  }
+
   .book {
     position: relative;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
   }
 
   /* Pila de hojas detrás de la libreta */
@@ -250,6 +257,86 @@ section[id] {
   .book-page-scroll {
     height: 100%;
     overflow-y: auto;
+  }
+
+  /* Hoja de volteo para el cambio de página (índice <-> sección) */
+  .book-flip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    opacity: 0;
+    visibility: hidden;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transform: rotateY(0deg) translateZ(0);
+    pointer-events: none;
+    z-index: 50;
+    will-change: transform;
+    /* Estado inactivo: la hoja se oculta/restaura al instante para que la cara
+       frontal "fantasma" no llegue a encimarse sobre el contenido nuevo */
+    transition: transform 0s linear, opacity 0s, visibility 0s;
+  }
+
+  .book-flip.is-visible {
+    opacity: 1;
+    visibility: visible;
+    /* Al activarse solo la rotación transiciona; opacidad y visibilidad cambian
+       en el mismo fotograma, sin fundidos que produzcan sangrado de texto */
+    transition: transform 0.68s cubic-bezier(0.45, 0.05, 0.25, 1), opacity 0s;
+  }
+
+  /* Avance (índice -> sección): la hoja nace sobre la página derecha */
+  .book-flip.is-forward {
+    left: 50%;
+    transform-origin: left center;
+    transform: rotateY(0deg) translateZ(0);
+  }
+
+  .book-flip.is-forward.is-visible {
+    transform: rotateY(-180deg) translateZ(0);
+  }
+
+  /* Regreso (sección -> índice): la hoja nace sobre la página izquierda */
+  .book-flip.is-backward {
+    right: 50%;
+    transform-origin: right center;
+    transform: rotateY(0deg) translateZ(0);
+  }
+
+  .book-flip.is-backward.is-visible {
+    transform: rotateY(180deg) translateZ(0);
+  }
+
+  /* Tras superar los 90° la hoja se eleva por encima de la página destino,
+     de modo que la cara entrante quede siempre por delante sin solaparse */
+  .book-flip.is-past-mid {
+    z-index: 60;
+  }
+
+  /* Caras de la hoja: opacas y con recorte del reverso (backface) para impedir
+     que el texto de la cara opuesta o del fondo se transparente durante el giro */
+  .book-flip-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background-color: #FBF8F2;
+    transform-style: flat;
+    -webkit-transform-style: flat;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .book-flip-face--front { transform: rotateY(0deg); }
+  .book-flip-face--back { transform: rotateY(180deg); }
+
+  /* Papel de las caras: refuerza la opacidad total y el recorte del reverso
+     incluso en Chromium, donde los descendientes transformados pueden escapar
+     del culling del padre si no se les aplica backface-visibility también */
+  .book-flip .book-page-paper {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background-color: #FBF8F2;
   }
 
   /* Tapa / portada que gira sobre el lomo (eje de bisagra) */
