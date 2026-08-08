@@ -140,36 +140,199 @@ section[id] {
       repeating-linear-gradient(180deg, transparent 0 31px, rgba(139, 94, 60, 0.09) 31px 32px);
   }
 
+  /* Libreta que abre en doble página: la tapa gira sobre su lomo (bisagra) */
+
   .notebook-book {
-    perspective: 1800px;
+    --page-w: 10.5rem;
+    width: calc(var(--page-w) * 2);
+    height: 24rem;
+    position: relative;
+    transform: translateX(calc(var(--page-w) / -2));
+    transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
+    perspective: 2200px;
   }
 
-  .notebook-sheets {
+  @media (min-width: 640px) {
+    .notebook-book { --page-w: 11.5rem; height: 26rem; }
+  }
+  @media (min-width: 768px) {
+    .notebook-book { --page-w: 12.5rem; height: 30rem; }
+  }
+  @media (min-width: 1024px) {
+    .notebook-book { --page-w: 14.5rem; height: 32rem; }
+  }
+  @media (min-width: 1280px) {
+    .notebook-book { --page-w: 16rem; height: 34rem; }
+  }
+
+  .notebook-book.is-open {
+    transform: translateX(0);
+  }
+
+  .book {
     position: relative;
+    width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    transform-origin: left center;
-    transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
   }
 
-  .notebook-sheets.turned {
-    transform: rotateY(180deg);
-  }
-
-  .notebook-sheets.no-anim {
-    transition: none;
-  }
-
-  .notebook-sheet {
+  /* Pila de hojas detrás de la libreta */
+  .book-stack {
     position: absolute;
     inset: 0;
     border-radius: 1.5rem;
+    pointer-events: none;
+  }
+
+  .book-stack-1 {
+    transform: translate(10px, -8px) rotate(0.6deg);
+    background-color: #EAE3D2;
+    border: 1px solid rgba(197, 139, 43, 0.45);
+    box-shadow: 0 20px 45px -15px rgba(30, 27, 46, 0.35);
+  }
+
+  .book-stack-2 {
+    transform: translate(5px, -4px) rotate(-0.4deg);
+    background-color: #E0D6BF;
+    border: 1px solid rgba(197, 139, 43, 0.35);
+  }
+
+  /* Página derecha (bajo la tapa, se revela al abrir) */
+  .book-page {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+  }
+
+  .book-page-right { right: 0; }
+
+  .book-page-paper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(197, 139, 43, 0.35);
+    background-color: #FBF8F2;
+    background-image:
+      linear-gradient(90deg, transparent 0 18px, rgba(197, 139, 43, 0.22) 18px 19px),
+      repeating-linear-gradient(180deg, transparent 0 26px, rgba(139, 94, 60, 0.08) 26px 27px);
+    box-shadow: 0 25px 50px -12px rgba(30, 27, 46, 0.25);
+  }
+
+  .page-spine-shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .page-spine-shadow--right {
+    right: 0;
+    background: linear-gradient(to left, rgba(30, 27, 46, 0.14), transparent);
+  }
+
+  .page-spine-shadow--left {
+    left: 0;
+    background: linear-gradient(to right, rgba(30, 27, 46, 0.14), transparent);
+  }
+
+  .book-page-scroll {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  /* Tapa / portada que gira sobre el lomo (eje de bisagra) */
+  .book-cover {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.72s cubic-bezier(0.45, 0.05, 0.25, 1);
+  }
+
+  .book-cover.is-open {
+    transform: rotateY(-180deg);
+    pointer-events: none;
+  }
+
+  .book-cover-face {
+    position: absolute;
+    inset: 0;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
 
-  .notebook-sheet-back {
+  .book-cover-back {
     transform: rotateY(180deg);
+  }
+
+  /* Lomo / bisagra central */
+  .book-spine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 16px;
+    transform: translateX(-50%) translateZ(3px);
+    background: linear-gradient(90deg, rgba(30, 27, 46, 0.10), rgba(244, 240, 234, 0.9) 45%, rgba(244, 240, 234, 0.9) 55%, rgba(30, 27, 46, 0.10));
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  /* Portada de la libreta */
+  .cover-art {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(197, 139, 43, 0.4);
+    border-radius: 1.25rem;
+    background-color: #FBF8F2;
+    background-image:
+      linear-gradient(90deg, transparent 0 18px, rgba(197, 139, 43, 0.20) 18px 19px),
+      repeating-linear-gradient(180deg, transparent 0 26px, rgba(139, 94, 60, 0.08) 26px 27px);
+    box-shadow: inset 0 0 0 3px rgba(197, 139, 43, 0.16), 0 25px 50px -12px rgba(30, 27, 46, 0.3);
+  }
+
+  .cover-badge {
+    position: absolute;
+    top: -1rem;
+    right: 0.5rem;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.5rem;
+    background-color: #C58B2B;
+    color: #FBF8F2;
+    font-family: 'Caveat', cursive;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    transform: rotate(3deg);
+    box-shadow: 0 10px 25px -5px rgba(30, 27, 46, 0.2);
+  }
+
+  @media (min-width: 1024px) {
+    .cover-badge { font-size: 1.05rem; }
+  }
+
+  .cover-tape {
+    position: absolute;
+    top: -0.75rem;
+    left: 1.25rem;
+    width: 5rem;
+    height: 1.35rem;
+    background-color: rgba(197, 139, 43, 0.55);
+    border-radius: 0.25rem;
+    transform: rotate(-6deg);
+    z-index: 20;
   }
 
   .back-btn {
